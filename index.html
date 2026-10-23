@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watching on Altair</title>
+<meta name="description" content="How to set up Tailscale, Streamyfin and your TV to watch on Altair.">
+<style>
+:root{--bg:#f7f6f3;--card:#fff;--ink:#1f1d1a;--muted:#5f5a53;--line:#e4e1db;--accent:#5b4bd6;--note:#fff4d6;--noteline:#e7c55a;--code:#f0eee9}
+@media (prefers-color-scheme:dark){:root{--bg:#16151a;--card:#1f1e24;--ink:#ecebef;--muted:#a7a4ae;--line:#33313a;--accent:#a99cff;--note:#3a3220;--noteline:#9a7d2c;--code:#2a2930}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header{background:linear-gradient(135deg,#2b2160,#5b4bd6);color:#fff;padding:48px 16px 40px}
+header .wrap{max-width:760px;margin:0 auto}
+header h1{margin:0 0 6px;font-size:2.2rem;letter-spacing:-.02em}
+header p{margin:0;opacity:.85}
+main{max-width:760px;margin:-20px auto 60px;padding:28px 22px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+@media (max-width:600px){main{margin:0;border-radius:0;border-left:0;border-right:0;padding:20px 16px}}
+h2{font-size:1.5rem;margin:2.4em 0 .6em;padding-top:.6em;border-top:1px solid var(--line);scroll-margin-top:16px}
+h2#contents{border-top:0;margin-top:1.4em}
+h3{font-size:1.2rem;margin:2em 0 .5em;scroll-margin-top:16px}
+a{color:var(--accent)}
+a.top{font-size:.8em;text-decoration:none;opacity:.5;margin-left:.3em}
+a.top:hover{opacity:1}
+code{background:var(--code);padding:.1em .35em;border-radius:5px;font-size:.92em}
+.note{background:var(--note);border-left:4px solid var(--noteline);padding:12px 16px;border-radius:8px;margin:1.2em 0}
+.note p{margin:0}
+figure{margin:12px 0 26px}
+figure img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+figure.phone img{max-width:280px}
+figure.tv img{max-width:640px}
+li{margin:.25em 0}
+footer{text-align:center;color:var(--muted);font-size:.9rem;margin:0 0 40px}
+</style></head><body>
+<header><div class="wrap"><h1>Watching on Altair</h1><p>Set up your phone and TV in about 20 minutes.</p></div></header>
+<main>
+<p>Altair is a private film and TV server. It isn't on the open internet: you reach it through <strong>Tailscale</strong>, a free app that creates a secure private link to the server. Once that's set up, you watch everything in the <strong>Streamyfin</strong> app on your phone, or the <strong>Jellyfin</strong> or Wholphin app on your TV.</p>
+<p><strong>Why we're moving from Plex.</strong> Plex charges for watching away from home, while Jellyfin is completely free. Jellyfin also lets me add some great automations: you can <strong>request films and shows right from the app</strong> and they're added automatically, new episodes turn up on their own, and everything stays private to us.</p>
+<div class="note">
+<p><strong>Important:</strong> Films and TV Shows are migrating to the new server. Films are being transferred first, when they disappear on Plex, use the new server. Shows will still be available on Plex while they transfer to the new server. Once migration is complete, I'll inform you and Plex will be shut down. There should be little to no disruption. Setup ready on the new system before migration is complete.</p>
+</div>
+<p><strong>Please tell me about any playback problems.</strong> This is new, so if something stutters, won't play, has missing subtitles or audio out of sync, report it at <code>requests.altair.watch</code> (see <a href="#report">Report a problem</a> below). If that doesn't work for you, email <strong>help@altair.watch</strong> instead.</p>
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#step-1">Step 1: Set up Tailscale on your phone</a></li>
+<li><a href="#step-2">Step 2: Download Streamyfin to your phone</a><ul>
+<li><a href="#pin">Optional: protect your profile with a PIN</a></li>
+<li><a href="#requests">Request films and shows</a></li>
+<li><a href="#notifications">Get notified about your requests and reports</a></li>
+<li><a href="#report">Report a problem</a></li>
+</ul>
+</li>
+<li><a href="#step-3">Step 3: Watch on your TV</a><ul>
+<li><a href="#android-tv">Google TV and Android TV</a></li>
+<li><a href="#fire-tv">Fire TV Stick</a></li>
+<li><a href="#apple-tv">Apple TV</a></li>
+</ul>
+</li>
+<li><a href="#help">If something isn't working</a></li>
+</ol>
+<p><strong>To get started you'll need:</strong></p>
+<ul>
+<li>The <strong>Tailscale invite link</strong> I sent you</li>
+<li>About 10 minutes for your phone, plus 10 minutes per TV</li>
+</ul>
+<p><strong>The server address is <code>altair.watch</code>.</strong> You'll type it into the apps below.</p>
+<h2 id="step-1">Step 1: Set up Tailscale on your phone <a class="top" href="#contents" aria-label="Back to contents">↑</a></h2>
+<p>The screenshots are from an Android phone. iPhone looks slightly different, but the steps are the same.</p>
+<p><strong>1. Open my invite link.</strong> Tap the <strong>Tailscale invite link</strong> I sent you and sign in with <strong>Google, Microsoft, GitHub, Apple</strong> or a passkey. This creates your free Tailscale account.</p>
+<figure class="phone"><img src="images/ts-01.png" alt="Tailscale invite page with sign-in options" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>2. Join the tailnet.</strong> Tap <strong>Join tailnet</strong> to accept the invite to the Altair (fatalhiccup.github) network.</p>
+<figure class="phone"><img src="images/ts-02.png" alt="Join the network page with the Join tailnet button" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>3. Wait for me to approve you.</strong> You'll see <strong>User approval required</strong>. I get a notification and approve your account, and I'll message you once it's done.</p>
+<figure class="phone"><img src="images/ts-03.png" alt="User approval required page" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>4. Download Tailscale.</strong> Once you're approved, the page says <strong>Join your network</strong>. Tap <strong>Download Tailscale</strong>, choose your device (<strong>Android</strong> or <strong>iOS</strong>), and install it from Google Play or the App Store.</p>
+<figure class="phone"><img src="images/ts-04.png" alt="Join your network page with the Download Tailscale button" width="400" height="870" loading="lazy"></figure>
+
+<figure class="phone"><img src="images/ts-05.png" alt="Tailscale download page, choose Android or iOS" width="400" height="870" loading="lazy"></figure>
+
+<figure class="phone"><img src="images/ts-06.png" alt="Tailscale in Google Play with the Install button" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>5. Allow the VPN.</strong> Open Tailscale. When it asks to set up a <strong>VPN connection</strong>, tap <strong>OK</strong> (on iPhone, tap <strong>Allow</strong> and enter your passcode or use Face ID). This is how Tailscale makes the private link.</p>
+<figure class="phone"><img src="images/ts-07.png" alt="Connection request prompt with the OK button" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>6. Log in and choose the tailnet.</strong> Tap <strong>Log in</strong> and sign in with the <strong>same account</strong> as in step 1. On the <strong>Connect device</strong> page, select <strong>Altair</strong> (fatalhiccup.github) and tap <strong>Connect</strong>.</p>
+<figure class="phone"><img src="images/ts-08.png" alt="Connect device page with Altair selected" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>7. Wait for approval, then refresh.</strong> The page says <strong>Logged in, but device not connected</strong> while I approve your phone. Once I have, <strong>refresh the page</strong>. It should say <strong>Login successful</strong>.</p>
+<figure class="phone"><img src="images/ts-09.png" alt="Logged in, but device not connected" width="400" height="870" loading="lazy"></figure>
+
+<figure class="phone"><img src="images/ts-10.png" alt="Login successful" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>8. Check you're connected.</strong> In the Tailscale app, the switch at the top should say <strong>Altair, Connected</strong>, and the server, called <strong>kessel</strong>, appears in the list of devices.</p>
+<figure class="phone"><img src="images/ts-11.png" alt="Tailscale app showing Altair Connected and kessel in the device list" width="400" height="870" loading="lazy"></figure>
+
+<p>Tailscale needs to be <strong>switched on whenever you watch</strong>. It only sends Altair traffic through the private link; your normal browsing isn't affected.</p>
+<h2 id="step-2">Step 2: Download Streamyfin to your Phone <a class="top" href="#contents" aria-label="Back to contents">↑</a></h2>
+<p><strong>1. Install Streamyfin.</strong> Search for <strong>Streamyfin</strong> in the App Store or Google Play and install it. It's free.</p>
+<figure class="phone"><img src="images/sf-01.png" alt="Streamyfin in Google Play with the Install button" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>2. Make sure Tailscale is Connected</strong> (see <a href="#step-1">Step 1</a>).</p>
+<p><strong>3. Connect to the server.</strong> Open Streamyfin. Where it asks for a server address, type <code>altair.watch</code> and tap <strong>Connect</strong>.</p>
+<figure class="phone"><img src="images/sf-02.png" alt="Streamyfin server address screen with altair.watch entered" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>4. Log in</strong> with your profile: type your name and leave <strong>Password</strong> empty (unless you've <a href="#pin">set a PIN</a>). Turn <strong>Save this account</strong> on and tap <strong>Log in</strong>.</p>
+<figure class="phone"><img src="images/sf-03.png" alt="Log in to Altair screen with a name and an empty password" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>5. Save your account.</strong> Streamyfin asks how to protect the saved account. Choose <strong>No protection</strong> and tap <strong>Save</strong>. The PIN option here is only a lock for this app, so you don't need it.</p>
+<figure class="phone"><img src="images/sf-04.png" alt="Save account screen with No protection selected" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>6. Finish the welcome screen.</strong> Look through the features, change any settings you want, and tap <strong>Done</strong>.</p>
+<figure class="phone"><img src="images/sf-05.png" alt="Welcome to Streamyfin screen with the Done button" width="400" height="870" loading="lazy"></figure>
+
+<h3 id="pin">Optional: protect your profile with a PIN <a class="top" href="#contents" aria-label="Back to contents">↑</a></h3>
+<p>Everyone's profile shows on the sign-in screen with <strong>no password</strong>. You may wish to set a password. A <strong>6-digit PIN</strong> works best, because it's quick to type with a TV remote.</p>
+<ol>
+<li>With Tailscale on, open a web browser on your phone or computer and go to <code>https://altair.watch</code>. Tap your name to sign in.</li>
+<li>Tap the <strong>profile icon</strong> (top right) → <strong>Settings</strong> → <strong>Profile</strong>.</li>
+<li>In the <strong>Password</strong> section, leave <strong>Current password</strong> empty. Type your 6-digit PIN in <strong>New password</strong> and <strong>Confirm new password</strong>.</li>
+<li>Tap <strong>Save</strong>.</li>
+</ol>
+<p>From then on, you'll tap your name and type your PIN to sign in, on your phone and your TV. Apps you're already signed in to may ask you to sign in again once.</p>
+<h3 id="requests">Request films and shows <a class="top" href="#contents" aria-label="Back to contents">↑</a></h3>
+<p>Here's the exciting part: Streamyfin lets you browse <strong>any</strong> film or TV show, not just what's already on Altair, and request it. Requests are fetched automatically and appear in your library when they're ready.</p>
+<p><strong>1. Find it.</strong> Tap the <strong>Search</strong> tab and type the title. If Altair doesn't have it yet, switch the results from <strong>Library</strong> to <strong>Discover</strong> (the requests results) to see it. You can also browse <strong>trending, popular and upcoming</strong> titles there.</p>
+<figure class="phone"><img src="images/sf-06.png" alt="Search tab with Discover selected, showing recent requests and trending titles" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>2. Request it.</strong> Tap the poster, then tap <strong>Request</strong>. For a TV show, choose which <strong>seasons</strong> you want (or all of them), then confirm.</p>
+<figure class="phone"><img src="images/sf-07.png" alt="A film's page with the Request button" width="400" height="870" loading="lazy"></figure>
+
+<p><strong>3. Wait for it.</strong> The title now shows as <strong>Requested</strong> or <strong>Processing</strong>. Some requests need my approval first; once approved, the server finds and downloads it automatically.</p>
+<p><strong>4. Watch it.</strong> When it's ready, the status changes to <strong>Available</strong> and it appears in <strong>Films</strong> or <strong>TV</strong>, usually within an hour, though new or rare titles can take longer, and some can't be found at all. Brand-new releases arrive once they're out digitally, not while they're only in cinemas.</p>
+<p>You don't need a separate login for requests: Streamyfin uses your Altair account. If <strong>Discover</strong> or <strong>Request</strong> doesn't appear, make sure Streamyfin is updated, then close and reopen it.</p>
+<h3 id="notifications">Get notified about your requests and reports <a class="top" href="#contents" aria-label="Back to contents">↑</a></h3>
+<p>To hear when a request is approved or ready, or when I reply to a problem you've reported, you <strong>must add your email address</strong>. Without it, you won't get any notifications.</p>
+<ol>
+<li>With Tailscale on, open <code>https://requests.altair.watch</code> in a web browser and sign in with your Altair profile (and your PIN, <a href="#pin">if you've set one</a>).</li>
+<li>Tap your <strong>profile picture → Settings → General</strong>, enter your <strong>Email</strong> address and tap <strong>Save</strong>.</li>
+<li>Go to <strong>Settings → Notifications → Email</strong> and tick <strong>Request Approved</strong>, <strong>Request Available</strong>, <strong>Issue Comment</strong> and <strong>Issue Resolved</strong>. Tap <strong>Save</strong>.</li>
+</ol>
+<p><strong>Optional: notifications on your phone.</strong> On iPhone, open <code>requests.altair.watch</code> in Safari, tap <strong>Share → Add to Home Screen</strong>, then open it <strong>from the new icon</strong>. Go to <strong>Settings → Notifications → Web Push</strong>, tick the same options, and tap <strong>Allow</strong> when asked. On Android, do the same in Chrome (menu → <strong>Add to Home screen</strong>).</p>
+<h3 id="report">Report a problem <a class="top" href="#contents" aria-label="Back to contents">↑</a></h3>
+<ol>
+<li>With Tailscale on, open <code>https://requests.altair.watch</code> and search for the film or show.</li>
+<li>Open it and tap <strong>Report an Issue</strong>.</li>
+<li>Choose the type (<strong>Video, Audio, Subtitles</strong> or <strong>Other</strong>). For TV, pick the season and episode.</li>
+<li>Describe what happened, including <strong>which device</strong> you were using and roughly <strong>when</strong>, then tap <strong>Submit</strong>.</li>
+</ol>
+<p>To see your reports and my replies, go to <code>https://issues.altair.watch</code>. You'll get an email when I reply or fix it (if you've <a href="#notifications">added your email</a>).</p>
+<p><strong>If reporting doesn't work, email help@altair.watch</strong> with the title, what went wrong, your device and roughly when.</p>
+<h2 id="step-3">Step 3: Watch on your TV <a class="top" href="#contents" aria-label="Back to contents">↑</a></h2>
+<p>Your TV needs to run <strong>Google TV / Android TV</strong>, <strong>Fire TV</strong> or <strong>Apple TV</strong> to use Tailscale. Most Samsung, LG, Roku and Hisense (VIDAA) TVs can't, so plug a streaming stick into a spare HDMI port instead. Good options are the Xiaomi TV Stick 4K (2nd Gen), the Google TV Streamer, or an Amazon Fire TV Stick 4K Max or 4K Plus.</p>
+<p><strong>Note:</strong> 2025+ Fire TV Sticks will not work:</p>
+<p><strong>Fire TV sticks to avoid.</strong> These run Amazon's newer Vega OS, which can't install Tailscale or Jellyfin:</p>
+<ul>
+<li><strong>Fire TV Stick 4K Select</strong> (2025)</li>
+<li><strong>Fire TV Stick HD (2026)</strong>, the newest HD model with Wi-Fi 6. The older Fire TV Stick HD with Wi-Fi 5 is fine.</li>
+</ul>
+<p>If you're buying one, check the exact name before you order. Amazon may also release more Vega OS sticks in future.</p>
+<p>On TVs you'll use an app built for a TV remote rather than Streamyfin: <strong>Wholphin</strong> on Google TV and Android TV, the official <strong>Jellyfin</strong> app on Fire TV, and <strong>Swiftfin</strong> on Apple TV.</p>
+<p><strong>You can't make requests on the TV.</strong> The TV apps only play what's already on Altair. To ask for something new, use <strong>Streamyfin on your phone</strong> (see <a href="#requests">Request films and shows</a> above), or open <code>https://requests.altair.watch</code> in a web browser on your phone or computer with <strong>Tailscale on</strong>. Once a request is ready, it appears on the TV automatically.</p>
+<h3 id="android-tv">Google TV and Android TV (including Xiaomi and Google TV Streamer) <a class="top" href="#contents" aria-label="Back to contents">↑</a></h3>
+<p><strong>1. Install Tailscale.</strong> On the TV, open the <strong>Google Play Store</strong> (from the Apps section on the home screen), search for <strong>Tailscale</strong> and install it.</p>
+<figure class="tv"><img src="images/atv-01.png" alt="Searching the Play Store on the TV" width="964" height="546" loading="lazy"></figure>
+
+<figure class="tv"><img src="images/atv-02.png" alt="Tailscale in the TV Play Store with the Install button" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>2. Allow the VPN.</strong> Open Tailscale. When the TV shows a <strong>Connection request</strong>, select <strong>OK</strong>.</p>
+<figure class="tv"><img src="images/atv-03.png" alt="Connection request on the TV with the OK button" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>3. Sign in using your phone.</strong> Select <strong>Log in</strong> and a <strong>QR code</strong> appears on the TV. Scan it with your <strong>phone's camera</strong>, open the link, sign in with the <strong>same Tailscale account</strong> as on your phone, choose <strong>Altair</strong> (fatalhiccup.github) and tap <strong>Connect</strong>.</p>
+<figure class="tv"><img src="images/atv-04.png" alt="QR code on the TV to scan with your phone" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>4. Wait for me to approve the TV.</strong> The TV shows <strong>Admin approval required</strong> until I approve it. Once I have, it connects by itself.</p>
+<figure class="tv"><img src="images/atv-05.png" alt="Admin approval required on the TV" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>5. Install Wholphin.</strong> In the Play Store on the TV, search for <strong>Wholphin</strong> and install it. It's a Jellyfin app built for TV remotes.</p>
+<figure class="tv"><img src="images/atv-06.png" alt="Wholphin in the TV Play Store with the Install button" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>6. Add the server.</strong> Open Wholphin and select <strong>Add Server</strong>. Type <code>altair.watch</code> and select <strong>Submit</strong>.</p>
+<figure class="tv"><img src="images/atv-07.png" alt="Wholphin Select Server screen with Add Server" width="964" height="546" loading="lazy"></figure>
+
+<figure class="tv"><img src="images/atv-08.png" alt="Enter Server IP or URL with altair.watch typed in" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>7. Pick your profile.</strong> Select your name on the <strong>Select User</strong> screen.</p>
+<figure class="tv"><img src="images/atv-09.png" alt="Select User screen showing everyone's profiles" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>8. Choose username and password.</strong> Wholphin shows a Quick Connect code. You don't need it: select <strong>Use username/password</strong> instead.</p>
+<figure class="tv"><img src="images/atv-10.png" alt="Quick Connect code with the Use username/password button" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>9. Log in.</strong> Your name is already filled in. Leave <strong>Password</strong> empty (or type your PIN <a href="#pin">if you've set one</a>) and select <strong>Login</strong>.</p>
+<figure class="tv"><img src="images/atv-11.png" alt="Username and password screen with the Login button" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>10. You're in.</strong> Altair's home screen appears and you can start watching.</p>
+<figure class="tv"><img src="images/atv-12.png" alt="Wholphin home screen showing recently added films" width="964" height="546" loading="lazy"></figure>
+
+<h3 id="fire-tv">Fire TV Stick <a class="top" href="#contents" aria-label="Back to contents">↑</a></h3>
+<p><strong>Check your model first.</strong> The <strong>Fire TV Stick 4K Select</strong> and the newest <strong>Fire TV Stick HD (2026)</strong> can't run Tailscale or Jellyfin. The <strong>Fire TV Stick 4K Max</strong>, <strong>4K Plus</strong>, <strong>Fire TV Cube</strong> and most older Fire TV sticks and Fire TV-built-in TVs work. Your model name is under <strong>Settings → My Fire TV → About</strong>.</p>
+<p><strong>1. Install Tailscale.</strong> From the Fire TV home screen, go to <strong>Find → Search</strong>, type <strong>Tailscale</strong>, and install it from the Amazon Appstore.</p>
+<p><strong>2. Allow the VPN.</strong> Open Tailscale. When a <strong>Connection request</strong> window appears, select <strong>OK</strong>, then <strong>Get Started</strong>, and accept the prompts to add a VPN configuration.</p>
+<p><strong>3. Sign in using your phone.</strong> Select <strong>Log in</strong>. A <strong>QR code</strong> appears on the TV. Scan it with your phone's camera and sign in with the <strong>same Tailscale account</strong> as on your phone, choose the fatalhiccup.github tailnet, and wait for me to approve the TV. It connects by itself once I have.</p>
+<p><strong>4. Install Jellyfin.</strong> Back on the home screen, <strong>Find → Search</strong>, type <strong>Jellyfin</strong>, and install the official <strong>Jellyfin</strong> app.</p>
+<figure class="tv"><img src="images/fire-01.png" alt="Jellyfin for Android TV in the app store with the Install button" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>5. Enter the server.</strong> Open Jellyfin, type <code>altair.watch</code> as the server address and select <strong>Connect</strong>.</p>
+<figure class="tv"><img src="images/fire-02.png" alt="Enter server address screen with altair.watch typed in" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>6. Pick your profile.</strong> Select your name on the <strong>Who's watching?</strong> screen.</p>
+<figure class="tv"><img src="images/fire-03.png" alt="Who's watching screen showing everyone's profiles" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>7. Choose Use a password.</strong> Jellyfin shows a Quick Connect code. You don't need it: select <strong>Use a password</strong> at the bottom.</p>
+<figure class="tv"><img src="images/fire-04.png" alt="Quick Connect code with the Use a password button" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>8. Sign in.</strong> Your name is already filled in. Leave <strong>Password</strong> empty (or type your PIN <a href="#pin">if you've set one</a>) and select <strong>Sign in</strong>.</p>
+<figure class="tv"><img src="images/fire-05.png" alt="Sign in screen with the name filled in and an empty password" width="964" height="546" loading="lazy"></figure>
+
+<p><strong>9. You're in.</strong> Altair's home screen appears and you can start watching.</p>
+<figure class="tv"><img src="images/fire-06.png" alt="Jellyfin home screen showing My media and recently added films" width="964" height="546" loading="lazy"></figure>
+
+<h3 id="apple-tv">Apple TV <a class="top" href="#contents" aria-label="Back to contents">↑</a></h3>
+<p>Install <strong>Tailscale</strong> from the App Store on the Apple TV and sign in with the same account (it shows a code or QR to approve on your phone). Then install <strong>Swiftfin</strong> (the Jellyfin app for Apple TV), enter <code>altair.watch</code> and tap your name.</p>
+<h2 id="help">If something isn't working <a class="top" href="#contents" aria-label="Back to contents">↑</a></h2>
+<p><strong>"Can't connect to server" or nothing loads</strong></p>
+<ul>
+<li>Open Tailscale and check it says <strong>Connected</strong>. This fixes it nine times out of ten.</li>
+<li>On a TV, Tailscale can switch off after the TV restarts. Open the Tailscale app and turn it back on.</li>
+<li>Check the address is exactly <code>altair.watch</code> (no <code>www.</code>).</li>
+</ul>
+<p><strong>The server isn't in my Tailscale app</strong></p>
+<ul>
+<li>Make sure you're logged in to the <strong>fatalhiccup.github</strong> tailnet with the <strong>same account</strong> you used for the invite. In the Tailscale app, tap your account name to see or switch tailnets. If it says <strong>waiting for approval</strong>, message me and I'll approve you.</li>
+<li>If the invite link has expired, ask me for a new one.</li>
+</ul>
+<p><strong>Forgotten your PIN</strong></p>
+<ul>
+<li>Your profile has no password unless you set one yourself.</li>
+<li>If you've set a PIN and forgotten it, message me and I'll clear it so you can set a new one.</li>
+</ul>
+<p><strong>It works at home but not elsewhere (or the other way round)</strong></p>
+<ul>
+<li>Some home routers block the Altair address. Try with Wi-Fi off, using mobile data. If it works there, tell me which router you have.</li>
+</ul>
+<p><strong>Playback stutters or buffers</strong></p>
+<ul>
+<li>Lower the quality in the player settings (for example 1080p or 720p). This helps most on slow Wi-Fi or mobile data.</li>
+<li>On a TV stick, a stronger Wi-Fi signal, or plugging in Ethernet where possible, makes the biggest difference.</li>
+</ul>
+<p>Still stuck? Send me a message with what you see on screen (a photo helps).</p>
+</main>
+<footer>Questions? Email <a href="mailto:help@altair.watch">help@altair.watch</a></footer>
+</body></html>
